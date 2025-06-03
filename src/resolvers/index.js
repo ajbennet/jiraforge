@@ -1,5 +1,16 @@
-import { properties } from '@forge/api';
+import { properties, asApp, route } from '@forge/api';
 import Resolver from '@forge/resolver';
+
+const CHECKLIST_TITLES = [
+    "Legal Review",
+    "Launch and Sales Enablement",
+    "Documentation",
+    "Feature Training",
+    "Customer Support Enablement",
+    "Data Science - Metrics",
+    "Pricing and Monetization",
+    "Sales Operations Coordination"
+];
 
 const defaultParts = [
     { name: "QA Demo with design/PM", required: true },
@@ -13,6 +24,20 @@ const defaultParts = [
 ];
 
 const resolver = new Resolver();
+
+resolver.define('getEpicChildIssues', async ({ payload }) => {
+    const { epicKey } = payload;
+    // JQL to get all child issues of the Epic
+    const jql = `"Epic Link" = ${epicKey}`;
+    const result = await asApp().requestJira(route`/rest/api/3/search?jql=${encodeURIComponent(jql)}&fields=summary,status,assignee`);
+    const data = await result.json();
+    return (data.issues || []).map(issue => ({
+        key: issue.key,
+        summary: issue.fields.summary,
+        status: issue.fields.status?.name || 'Unknown',
+        assignee: issue.fields.assignee?.displayName || 'Unassigned'
+    })).filter(issue => CHECKLIST_TITLES.includes(issue.summary));
+});
 
 resolver.define('getValues', async ({ payload }) => {
     try {

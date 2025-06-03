@@ -1,13 +1,4 @@
 modules:
-  jira:issueGlance:
-    - key: qa-demo-validator-glance
-      resource: main
-      resolver:
-        function: resolver
-      render: native
-      title: Product Launch Signoff
-      description: Product Launch Signoff
-      label: Product Launch Signoff
   jira:adminPage:
     - key: qa-demo-validator-admin-page
       resource: admin
