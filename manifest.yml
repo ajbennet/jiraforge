@@ -1,25 +1,46 @@
 modules:
   jira:issueGlance:
     - key: qa-demo-validator-glance
-      function: main
-      title: QA demo validator
-      description: QA demo validator
-      label: QA demo validator
+      resource: main
+      resolver:
+        function: resolver
+      render: native
+      title: Product Launch Signoff
+      description: Product Launch Signoff
+      label: Product Launch Signoff
   jira:adminPage:
     - key: qa-demo-validator-admin-page
-      function: admin
-      title: QA demo validator
-      description: QA demo validator
-      label: QA demo validator
+      resource: admin
+      resolver:
+        function: adminResolver
+      render: native
+      title: Product Launch Signoff
+      description: Product Launch Signoff
+      label: Product Launch Signoff
+  jira:issuePanel:
+    - key: product-launch-approval-panel
+      resource: main
+      resolver:
+        function: resolver
+      render: native
+      title: Product Launch Signoff
+      icon: https://developer.atlassian.com/platform/forge/images/issue-panel-icon.svg
+      issueTypes:
+        - Epic
   function:
-    - key: main
-      handler: index.run
-    - key: admin
-      handler: admin.run
+    - key: resolver
+      handler: resolvers/index.handler
+    - key: adminResolver
+      handler: resolvers/admin.handler
+resources:
+  - key: main
+    path: src/frontend/index.jsx
+  - key: admin
+    path: src/frontend/admin.jsx
 app:
-  id: ari:cloud:ecosystem::app/2a58f91f-bbd7-4959-8de7-f967d383849b
+  id: ari:cloud:ecosystem::app/09a62dfe-6556-4259-9c8c-7da36ad3ad37
   runtime:
-    name: "nodejs22.x"
+    name: nodejs22.x
 permissions:
   scopes:
     - write:jira-work
